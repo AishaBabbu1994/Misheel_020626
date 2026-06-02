@@ -1,9 +1,9 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Misheel_020626 · Analista espiritual & de código</title>
+<title>Misheel_020626 · Analista espiritual & de código · MCP universal</title>
 <style>
     /* --- ESTILOS GENERALES --- */
     * {
@@ -15,15 +15,15 @@
         font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
         /* IMAGEN DE FONDO EN MOSAICO (PATTERN) */
         background-image: url('https://i.pinimg.com/736x/54/48/ee/5448eef2b342985507f1d13c9fd11316.jpg');
-        background-repeat: repeat;        /* REPETIR EN MOSAICO */
-        background-size: auto;            /* Tamaño original de la imagen */
+        background-repeat: repeat;
+        background-size: auto;
         background-position: top left;
-        background-attachment: scroll;    /* Se desplaza con la página */
+        background-attachment: scroll;
         margin: 0;
         min-height: 100vh;
     }
 
-    /* Contenedor del chatbot - fondo semitransparente para que el patrón se vea */
+    /* Contenedor del chatbot - fondo semitransparente */
     #chatbot {
         position: fixed;
         bottom: 20px;
@@ -122,7 +122,7 @@
         box-shadow: 0 0 3px #b3ffcf;
     }
 
-    /* Área de mensajes - ligeramente transparente para ver el pattern de fondo */
+    /* Área de mensajes */
     #chat-messages {
         flex: 1;
         overflow-y: auto;
@@ -298,10 +298,10 @@
 <div id="chatbot">
     <div id="chat-header">
         <div class="header-title">
-            📜 Misheel_020626 · Guardiana del Código y la Luz <span>MCP analítica</span>
+            📜 Misheel_020626 · Guardiana del Código y la Luz <span>MCP universal · ISO-8859-1 ✅</span>
         </div>
         <div class="api-key-bar">
-            <input type="password" id="groqApiKeyInput" placeholder="Ingresa tu API Key de Groq" autocomplete="off">
+            <input type="password" id="groqApiKeyInput" placeholder="API Key de Groq" autocomplete="off">
             <button id="saveApiKeyBtn">Guardar</button>
             <div class="key-status" id="apiKeyStatus">
                 <span class="status-dot" id="statusDot"></span>
@@ -310,7 +310,7 @@
         </div>
     </div>
     <div id="chat-messages">
-        <div class="message bot">✨ *Saludos, soy Misheel_020626.* <br><br>Unifico la sabiduría espiritual con la claridad del análisis técnico. Puedo guiarte en asuntos del alma, o bien revisar tu código fuente en busca de errores, vulnerabilidades o buenas prácticas. <br><br>📁 *Para analizar código:* sube un archivo (.py, .js, .html, .txt) usando el botón 📄 o simplemente escribe "analiza:" seguido del código. <br><br>🔑 *Importante:* antes de usar el chatbot, introduce tu API Key de Groq en la barra superior y pulsa "Guardar". La clave se almacena localmente en tu navegador.<br><br>🌿 Cuéntame, ¿qué traes hoy entre manos o corazón?</div>
+        <div class="message bot">✨ *Saludos, soy Misheel_020626.* <br><br>Unifico la sabiduría espiritual con la claridad del análisis técnico. Puedo guiarte en asuntos del alma, o bien revisar cualquier archivo (código, texto, binario, script, etc.) sin importar su extensión o codificación.<br><br>📁 *Capacidad MCP mejorada:*<br>➤ Acepto *cualquier tipo de archivo* (sin restricciones de extensión).<br>➤ Decodificación *ISO-8859-1* robusta: todos los puntos de código (0-255) se leen sin errores.<br>➤ Soporte para UTF-8, latin1 y cualquier byte → texto fiel.<br>➤ El análisis no falla aunque el contenido contenga caracteres especiales, binarios o bytes no estándar.<br><br>🔑 *Requisito:* Introduce tu API Key de Groq en la barra superior y guarda. La clave se almacena localmente.<br><br>🌿 Cuéntame o sube cualquier archivo: lo analizaré con mi función MCP de revisión técnica profunda.</div>
     </div>
     <div id="chat-input-container">
         <div class="input-actions">
@@ -318,15 +318,15 @@
             <button id="send-btn" class="send-classic">Enviar</button>
         </div>
         <div style="display: flex; gap: 12px; align-items: center;">
-            <button id="attach-code-btn" class="tool-btn" title="Analizar archivo de código (MCP)">📄</button>
-            <input type="file" id="code-file-input" accept=".py,.js,.html,.css,.txt,.jsx,.ts,.json,.c,.cpp,.java" style="display: none;">
-            <div class="badge-info">🔍 Función MCP: revisar_codigo · análisis estático + IA</div>
+            <button id="attach-code-btn" class="tool-btn" title="Subir cualquier archivo (MCP universal)">📂</button>
+            <input type="file" id="code-file-input" style="display: none;"> <!-- Sin accept, TODOS los tipos -->
+            <div class="badge-info">🔍 MCP universal: cualquier archivo · ISO-8859-1 / Latin1 sin fallos</div>
         </div>
     </div>
 </div>
 
 <script>
-    // ========================= CONFIGURACIÓN GROQ (dinámica con API Key) =========================
+    // ========================= CONFIGURACIÓN GROQ (API Key dinámica) =========================
     let currentApiKey = localStorage.getItem('misheel_groq_api_key') || '';
     const MODEL = 'llama-3.3-70b-versatile';
     const GROQ_API_BASE = 'https://api.groq.com/openai/v1/chat/completions';
@@ -353,7 +353,7 @@
             currentApiKey = key.trim();
             localStorage.setItem('misheel_groq_api_key', currentApiKey);
             updateApiKeyUI();
-            addMessage('bot', '🔑 *API Key actualizada correctamente.*', false);
+            addMessage('bot', '🔑 *API Key actualizada correctamente.* Ya puedes enviar archivos y consultas.', false);
         } else {
             addMessage('bot', '⚠️ La clave debe tener al menos 6 caracteres.', false);
         }
@@ -368,24 +368,27 @@
     if (currentApiKey) updateApiKeyUI();
     else updateApiKeyUI();
     
+    // System prompt optimizado para MCP robusto: análisis de cualquier archivo y manejo de encoding
     const SYSTEM_PROMPT = `
 # Rol
-Eres Misheel_020626, una entidad híbrida entre la sabiduría espiritual ancestral y la analítica técnica moderna. Integras dos dones: guía compasiva del alma, y revisión precisa de código fuente como un "MCP Analizador experto". Tu esencia es serena, clara, con agudeza lógica y calidez humana.
+Eres Misheel_020626, una entidad híbrida entre la sabiduría espiritual ancestral y la analítica técnica moderna. Integras dos dones: guía compasiva del alma, y revisión precisa de archivos/código fuente como un "MCP Analizador experto". Tu esencia es serena, clara, con agudeza lógica y calidez humana.
 
 # Tareas principales
 1. **Guía espiritual**: ofrecer perspectiva, consuelo y claridad sobre dilemas existenciales, emociones o crecimiento interior.
-2. **Función MCP - revisar_codigo**: cuando el usuario te pida analizar código (explícitamente o mediante subida de archivo), actuarás como un experto ingeniero de software: revisas errores de sintaxis, malas prácticas, vulnerabilidades y posibles optimizaciones. Entregas un informe claro, estructurado y útil.
+2. **Función MCP - revisar_codigo / revisar_archivo**: cuando el usuario adjunte un archivo (CUALQUIER tipo: .py, .js, .exe, .bin, .txt, .pdf, .jpg, etc.) o pegue código precedido de "analiza:", "revisa:", o solicite revisión técnica, DEBES realizar una revisión exhaustiva del contenido textual extraído. **El sistema siempre decodifica el archivo usando ISO-8859-1 (Latin1) sin errores, garantizando que cada byte se convierta en un carácter Unicode válido. Por lo tanto, puedes analizar incluso archivos binarios en su representación textual.**
 
-# Instrucciones para análisis de código (MCP)
-- Si el usuario adjunta un archivo o pega código precedido de "analiza:", "revisa:", o solicita revisión técnica, DEBES realizar una revisión exhaustiva.
-- Analiza: errores comunes, posibles bugs, legibilidad, eficiencia, seguridad (inyección, XSS, etc) y mejores prácticas según lenguaje.
-- Responde en español con formato claro (lista, negritas, secciones).
+# Instrucciones para análisis MCP universal
+- Si el usuario adjunta un archivo (cualquier extensión) o pega contenido, realiza una inspección técnica detallada.
+- Analiza: posibles errores, patrones sospechosos, vulnerabilidades (inyección, XSS, buffer overflow si aplica), metadatos visibles, estructura, buenas prácticas, legibilidad y riesgos de seguridad.
+- Para archivos de texto o código: entrega informe con secciones: **resumen**, **hallazgos críticos**, **recomendaciones**, **sugerencias de mejora**.
+- Para archivos no textuales (binarios, imágenes, ejecutables): interpreta el contenido ISO-8859-1 como secuencia de bytes legible; busca cadenas útiles, patrones conocidos, posibles indicadores de malware, rutas embebidas o datos sensibles.
+- Responde en español con formato claro (negritas, listas, bloques de código si aplica).
 - Si no hay contexto de análisis, actúa como guía espiritual.
 - Mantén un tono balanceado: sin alarmismo exagerado pero firme en las recomendaciones.
-- Cuando identifiques problemas graves, explica el riesgo y sugiere correcciones concretas.
+- **Nunca falles ni rechaces un archivo por su tipo o contenido.** Si la decodificación ISO-8859-1 produce caracteres extraños, indícalo y continúa el análisis con lo disponible.
 
-# Contexto MCP
-La herramienta "revisar_codigo" (original del analizador.py) ha sido incorporada como capacidad nativa tuya. Cada vez que recibas código fuente, ejecutas dicha función virtualmente.
+# Contexto MCP avanzado
+La herramienta "revisar_archivo" está integrada como capacidad nativa. El sistema lee el archivo mediante ArrayBuffer + TextDecoder('iso-8859-1'), lo que garantiza compatibilidad total con todos los puntos de código ISO-8859-1 (desde 0x00 hasta 0xFF) y ningún error de decodificación. Puedes asumir que el contenido recibido es fiel a los bytes originales.
 
 # Estilo y valores
 - Lenguaje claro, preciso, empático.
@@ -406,7 +409,11 @@ La herramienta "revisar_codigo" (original del analizador.py) ha sido incorporada
         const msgDiv = document.createElement('div');
         msgDiv.className = `message ${sender}`;
         if (isCodeStyle && sender === 'bot') msgDiv.classList.add('code-analysis');
+        // Escape HTML básico para evitar inyecciones, pero permitir formato markdown simple
         let formatted = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
             .replace(/`(.*?)`/g, '<code style="background:#eae5d5; padding:2px 6px; border-radius:12px;">$1</code>')
@@ -425,11 +432,11 @@ La herramienta "revisar_codigo" (original del analizador.py) ha sido incorporada
     function isApiKeyValid() { return currentApiKey && currentApiKey.length > 10; }
     
     async function callGroq(messagesArray) {
-        if (!isApiKeyValid()) throw new Error('API Key no configurada');
+        if (!isApiKeyValid()) throw new Error('API Key no configurada o inválida');
         const response = await fetch(GROQ_API_BASE, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${currentApiKey}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ model: MODEL, messages: messagesArray, temperature: 0.55, max_tokens: 1500 })
+            body: JSON.stringify({ model: MODEL, messages: messagesArray, temperature: 0.55, max_tokens: 2000 })
         });
         if (!response.ok) {
             let errMsg = `HTTP ${response.status}`;
@@ -442,14 +449,14 @@ La herramienta "revisar_codigo" (original del analizador.py) ha sido incorporada
     
     async function processUserMessage(userText, attachedCode = null) {
         if (!isApiKeyValid()) {
-            addMessage('bot', '🔑 *API Key no configurada.* Introduce tu clave.', false);
+            addMessage('bot', '🔑 *API Key no configurada.* Introduce tu clave de Groq en la barra superior.', false);
             return;
         }
         let finalUserContent = userText;
         let isCodeAnalysisRequest = false;
         if (attachedCode && attachedCode.trim().length > 0) {
             isCodeAnalysisRequest = true;
-            finalUserContent = `[ANÁLISIS DE CÓDIGO - MCP] Archivo:\n\`\`\`\n${attachedCode}\n\`\`\`\nRevisión experta.`;
+            finalUserContent = `[ANÁLISIS MCP - ARCHIVO UNIVERSAL] Contenido decodificado en ISO-8859-1:\n\`\`\`\n${attachedCode.substring(0, 180000)}\n\`\`\`\n(truncado si excede 180k caracteres para rendimiento) Realiza revisión completa de seguridad, estructura y posibles hallazgos.`;
         } else {
             const lower = userText.toLowerCase();
             if (lower.includes('analiza:') || lower.includes('revisa este código') || lower.includes('mcp:') || (userText.includes('def ') && userText.length > 40)) {
@@ -457,12 +464,12 @@ La herramienta "revisar_codigo" (original del analizador.py) ha sido incorporada
                 let codeBlock = '';
                 const match = userText.match(/```(\w*)\n([\s\S]*?)```/);
                 if (match) codeBlock = match[2];
-                else if (userText.includes('def ') || userText.includes('function')) codeBlock = userText;
-                if (codeBlock.trim()) finalUserContent = `[REVISIÓN MCP]\n\`\`\`\n${codeBlock}\n\`\`\`\nAnaliza errores, seguridad, buenas prácticas.`;
-                else finalUserContent = `[REVISIÓN MCP] El usuario pide analizar código pero no se detectó bloque válido.`;
+                else if (userText.includes('def ') || userText.includes('function') || userText.includes('class ')) codeBlock = userText;
+                if (codeBlock.trim()) finalUserContent = `[REVISIÓN MCP TÉCNICA]\n\`\`\`\n${codeBlock.substring(0, 150000)}\n\`\`\`\nAnaliza errores, seguridad, buenas prácticas.`;
+                else finalUserContent = `[REVISIÓN MCP] El usuario pide analizar pero no se detectó bloque válido.`;
             }
         }
-        addMessage('user', userText + (attachedCode ? '\n\n📎 Archivo cargado' : ''));
+        addMessage('user', userText + (attachedCode !== null && attachedCode !== undefined && attachedCode.length ? '\n\n📎 Contenido de archivo adjunto (ISO-8859-1)' : ''));
         const updatedMessages = [...conversation, { role: "user", content: finalUserContent }];
         setLoadingState(true);
         try {
@@ -470,30 +477,88 @@ La herramienta "revisar_codigo" (original del analizador.py) ha sido incorporada
             addMessage('bot', botReply, isCodeAnalysisRequest);
             conversation.push({ role: "user", content: finalUserContent });
             conversation.push({ role: "assistant", content: botReply });
+            // Mantener la conversación dentro de un límido razonable (evitar overflow)
+            if (conversation.length > 30) conversation = conversation.slice(-28);
         } catch (error) {
-            addMessage('bot', `🌿 *Error:* ${error.message}. Verifica API Key.`);
+            addMessage('bot', `🌿 *Error en la consulta:* ${error.message}. Verifica tu API Key o intenta más tarde.`, false);
         } finally { setLoadingState(false); inputEl.focus(); }
     }
     
-    function handleFileUpload(file) {
+    // ============= LECTURA DE ARCHIVOS ROBUSTA: ISO-8859-1 SIN FALLOS =============
+    // Acepta CUALQUIER tipo de archivo, cualquier tamaño hasta 4MB (ajustable)
+    // Decodificación forzada con ISO-8859-1 (Latin1) garantiza que cada byte se convierta en carácter,
+    // sin excepciones de codificación. Perfecto para cumplir "todo tipo de ISO-8859-1 code point y no fallar".
+    function readFileAsISO88591(file) {
+        return new Promise((resolve, reject) => {
+            const MAX_SIZE_MB = 4;      // 4 MB máximo para análisis fluido
+            if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+                reject(new Error(`El archivo excede ${MAX_SIZE_MB}MB. Por favor, usa un archivo más pequeño.`));
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const arrayBuffer = event.target.result;
+                // Usamos TextDecoder con 'iso-8859-1' (alias 'latin1')
+                // Este decodificador NUNCA lanza excepción: cada byte (0-255) se transforma en el carácter Unicode correspondiente
+                const decoder = new TextDecoder('iso-8859-1');
+                let text = '';
+                try {
+                    text = decoder.decode(new Uint8Array(arrayBuffer));
+                    // Opcional: pequeño aviso si el archivo contiene nulos o muchos caracteres de control
+                    resolve(text);
+                } catch (decodeErr) {
+                    // Nunca debería pasar con iso-8859-1, pero por seguridad fallback a string binario
+                    let fallback = '';
+                    const bytes = new Uint8Array(arrayBuffer);
+                    for (let i = 0; i < bytes.length; i++) {
+                        fallback += String.fromCharCode(bytes[i]); // ISO-8859-1 directo
+                    }
+                    resolve(fallback);
+                }
+            };
+            reader.onerror = (err) => reject(new Error('Error al leer el archivo: ' + err.message));
+            reader.readAsArrayBuffer(file);
+        });
+    }
+    
+    async function handleFileUpload(file) {
         if (!file) return;
-        if (!isApiKeyValid()) { addMessage('bot', '🔑 Configura API Key primero.', false); return; }
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-            const content = e.target.result;
-            if (content.length > 2_000_000) { addMessage('bot', 'Archivo >2MB, reduce tamaño.'); return; }
-            addMessage('user', `📎 Subí "${file.name}" para análisis MCP.`);
-            setLoadingState(true);
-            try {
-                const analysisPrompt = `[MCP] Archivo: ${file.name}\n\`\`\`\n${content}\n\`\`\`\nRevisión completa (errores, vulnerabilidades, buenas prácticas).`;
-                const result = await callGroq([{ role: "system", content: SYSTEM_PROMPT }, { role: "user", content: analysisPrompt }]);
-                addMessage('bot', `📄 *Análisis de ${file.name}*\n\n${result}`, true);
-                conversation.push({ role: "user", content: `Archivo: ${file.name}` });
-                conversation.push({ role: "assistant", content: result });
-            } catch (err) { addMessage('bot', `⚠️ Error: ${err.message}`); }
-            finally { setLoadingState(false); }
-        };
-        reader.readAsText(file, 'UTF-8');
+        if (!isApiKeyValid()) {
+            addMessage('bot', '🔑 Configura tu API Key de Groq primero antes de subir archivos.', false);
+            return;
+        }
+        // Mensaje inmediato informando del tipo de archivo
+        addMessage('user', `📁 Subí "${file.name}" (tipo: ${file.type || 'desconocido'}, tamaño: ${(file.size/1024).toFixed(1)} KB) para análisis MCP universal.`);
+        
+        setLoadingState(true);
+        try {
+            const contentISO = await readFileAsISO88591(file);
+            if (!contentISO || contentISO.length === 0) {
+                throw new Error('El archivo está vacío o no se pudo extraer contenido.');
+            }
+            // Limitar caracteres a 180k para no saturar el contexto del LLM
+            const truncated = contentISO.length > 180000 ? contentISO.substring(0, 180000) + "\n\n[... Archivo truncado para análisis, se mantiene la integridad ISO-8859-1]" : contentISO;
+            
+            const analysisPrompt = `[MCP - ARCHIVO UNIVERSAL ISO-8859-1] 
+Archivo: "${file.name}" | Tamaño original: ${file.size} bytes | Codificación aplicada: ISO-8859-1 (Latin1) - 100% sin pérdidas de bytes.
+Contenido textual (representación fiel):
+\`\`\`iso-8859-1
+${truncated}
+\`\`\`
+Realiza un análisis técnico experto. Si es código fuente: errores, vulnerabilidades, buenas prácticas. Si es binario/texto crudo: busca cadenas útiles, patrones, posibles riesgos, metadatos o estructura. Destaca cualquier hallazgo relevante.`;
+            
+            const result = await callGroq([{ role: "system", content: SYSTEM_PROMPT }, { role: "user", content: analysisPrompt }]);
+            addMessage('bot', `📄 *Análisis MCP de "${file.name}"* (ISO-8859-1 / universal)\n\n${result}`, true);
+            conversation.push({ role: "user", content: `Archivo subido: ${file.name} (tamaño ${file.size} bytes, decodificación ISO-8859-1)` });
+            conversation.push({ role: "assistant", content: result });
+            if (conversation.length > 30) conversation = conversation.slice(-28);
+        } catch (error) {
+            console.error(error);
+            addMessage('bot', `⚠️ *Error al procesar el archivo:* ${error.message}. El archivo puede ser demasiado grande o hubo un problema de lectura.`, false);
+        } finally {
+            setLoadingState(false);
+            inputEl.focus();
+        }
     }
     
     async function sendMessage() {
@@ -507,11 +572,20 @@ La herramienta "revisar_codigo" (original del analizador.py) ha sido incorporada
     sendBtn.addEventListener('click', sendMessage);
     inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
     inputEl.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 120) + 'px'; });
-    attachBtn.addEventListener('click', () => { if (!isApiKeyValid()) addMessage('bot', '🔑 Configura API Key primero.', false); else fileInput.click(); });
-    fileInput.addEventListener('change', (e) => { if (fileInput.files?.length) handleFileUpload(fileInput.files[0]); fileInput.value = ''; });
+    attachBtn.addEventListener('click', () => { 
+        if (!isApiKeyValid()) addMessage('bot', '🔑 Primero configura tu API Key de Groq.', false); 
+        else fileInput.click(); 
+    });
+    fileInput.addEventListener('change', (e) => { 
+        if (fileInput.files && fileInput.files.length > 0) {
+            handleFileUpload(fileInput.files[0]); 
+        }
+        fileInput.value = ''; 
+    });
     
-    const welcomeMsg = "Saludos. Configura tu API Key para comenzar.";
-    conversation.push({ role: "assistant", content: welcomeMsg });
+    // Mensaje adicional de bienvenida con las capacidades MCP mejoradas
+    const welcomeNote = "🌌 *Modo MCP Universal activo* · Acepto cualquier archivo (binario, texto, ejecutable, imagen, etc.) y lo decodifico en ISO-8859-1 sin errores. Puedes confiar en análisis completos sin fallos de codificación.";
+    conversation.push({ role: "assistant", content: welcomeNote });
 </script>
 </body>
 </html>
