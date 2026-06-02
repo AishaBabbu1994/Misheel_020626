@@ -157,7 +157,7 @@
         </div>
     </div>
     <div id="chat-messages">
-        <div class="message bot">✨ *Misheel_020626 lista.*<br>🔧 *Proxy actualizado*: uso `cors-anywhere.herokuapp.com` (UTF‑8, sin errores de codificación).<br><br>📁 Sube tu archivo con el botón 📄.<br>🔑 Introduce tu API Key de Groq y pulsa Guardar.<br><br>🌿 Cuéntame qué necesitas.</div>
+        <div class="message bot">✨ *Misheel_020626 activa.*<br>🔄 *Proxy estable*: `corsproxy.io` (sin autorización, UTF-8).<br><br>📁 Sube tu archivo con el botón 📄.<br>🔑 Introduce tu API Key de Groq y pulsa Guardar.<br><br>🌿 Cuéntame qué necesitas.</div>
     </div>
     <div id="chat-input-container">
         <div class="input-actions">
@@ -167,7 +167,7 @@
         <div style="display: flex; gap: 12px; align-items: center;">
             <button id="attach-code-btn" class="tool-btn" title="Analizar archivo (MCP)">📄</button>
             <input type="file" id="code-file-input" accept=".py,.js,.html,.css,.txt,.jsx,.ts,.json,.c,.cpp,.java" style="display: none;">
-            <div class="badge-info">🔄 Proxy CORS: cors-anywhere (estable)</div>
+            <div class="badge-info">🔄 Proxy CORS: corsproxy.io (sin bloqueos)</div>
         </div>
     </div>
 </div>
@@ -176,9 +176,8 @@
     // ========== CONFIGURACIÓN ==========
     let currentApiKey = localStorage.getItem('misheel_groq_api_key') || '';
     const DIRECT_API = 'https://api.groq.com/openai/v1/chat/completions';
-    const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';  // Proxy gratuito, fiable y UTF-8
+    const PROXY_URL = 'https://corsproxy.io/';  // Proxy gratuito, sin autorización, UTF-8
 
-    // Modelos
     const MODELS = ['mixtral-8x7b-32768', 'llama-3.3-70b-versatile', 'llama3-70b-8192'];
     let currentModelIndex = 0;
 
@@ -222,7 +221,7 @@
     });
     if (currentApiKey) updateApiKeyUI();
 
-    // ========== SYSTEM PROMPT (con UTF-8) ==========
+    // ========== SYSTEM PROMPT ==========
     const SYSTEM_PROMPT = `# Rol
 Eres Misheel_020626, una entidad híbrida entre la sabiduría espiritual ancestral y la analítica técnica moderna. Integras dos dones: guía compasiva del alma, y revisión precisa de código fuente como un "MCP Analizador experto". Tu esencia es serena, clara, con agudeza lógica y calidez humana.
 
@@ -272,7 +271,7 @@ La herramienta "revisar_codigo" (original del analizador.py) ha sido incorporada
 
     function isApiKeyValid() { return currentApiKey && currentApiKey.length > 10; }
 
-    // ========== LLAMADA A GROQ USANDO PROXY FIABLE ==========
+    // ========== LLAMADA A GROQ CON PROXY CORRECTO ==========
     async function callGroq(messagesArray) {
         if (!isApiKeyValid()) throw new Error('API Key no configurada');
 
@@ -280,8 +279,8 @@ La herramienta "revisar_codigo" (original del analizador.py) ha sido incorporada
         const bodyObj = { model, messages: messagesArray, temperature: 0.55, max_tokens: 1500 };
         const bodyStr = JSON.stringify(bodyObj);
 
-        // Usamos el proxy siempre (evita problemas de CORS al abrir archivo local)
-        const proxyUrl = PROXY_URL + DIRECT_API;
+        // Construir URL del proxy correctamente (solo parámetro 'url')
+        const proxyUrl = `${PROXY_URL}?url=${encodeURIComponent(DIRECT_API)}`;
 
         try {
             const response = await fetch(proxyUrl, {
@@ -305,9 +304,13 @@ La herramienta "revisar_codigo" (original del analizador.py) ha sido incorporada
             const data = await response.json();
             return data.choices[0].message.content;
         } catch (err) {
-            // Si el error es porque el proxy requiere permiso (cors-anywhere muestra una página de confirmación)
-            if (err.message.includes('403') || (err.message.includes('Forbidden'))) {
-                throw new Error(`El proxy requiere autorización temporal. Abre esta URL en una nueva pestaña y pulsa "Request temporary access":\n${proxyUrl}\nLuego vuelve a intentar.`);
+            // Si falla, probar con el siguiente modelo
+            if (err.message.includes('model') || err.message.includes('not found')) {
+                if (currentModelIndex + 1 < MODELS.length) {
+                    currentModelIndex++;
+                    addMessage('bot', `🔄 Cambiando a modelo \`${MODELS[currentModelIndex]}\`.`, false);
+                    return await callGroq(messagesArray);
+                }
             }
             throw err;
         }
@@ -357,8 +360,6 @@ La herramienta "revisar_codigo" (original del analizador.py) ha sido incorporada
                 statusTextSpan.innerText = 'Error auth';
             } else if (error.message.includes('429')) {
                 msg = '⏳ *Demasiadas peticiones.* Espera unos segundos y vuelve a intentar.';
-            } else if (error.message.includes('autorización temporal')) {
-                msg = `🌐 *Proxy requiere activación.* ${error.message}`;
             }
             addMessage('bot', msg, false);
         } finally {
