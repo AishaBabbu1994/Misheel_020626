@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Misheel_020626 · Analista espiritual & de código</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
+        background-image: url('https://i.pinimg.com/736x/54/48/ee/5448eef2b342985507f1d13c9fd11316.jpg');
+        background-repeat: repeat;
+        background-size: auto;
+        background-position: top left;
+        background-attachment: scroll;
+        margin: 0;
+        min-height: 100vh;
+    }
+    #chatbot {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 400px;
+        height: 650px;
+        background: rgba(255, 254, 247, 0.94);
+        border-radius: 32px;
+        box-shadow: 0 25px 45px rgba(80, 50, 20, 0.2), 0 0 0 1px rgba(210, 180, 140, 0.3);
+        z-index: 9999;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+    #chat-header {
+        background: linear-gradient(115deg, #2b3b2c, #5a6e4a);
+        color: #fef0cf;
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .header-title { display: flex; align-items: center; gap: 8px; }
+    .header-title span { background: #f9e0a0; color: #2b3b2c; font-size: 0.65rem; padding: 4px 8px; border-radius: 40px; }
+    .api-key-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #2b3b2cbb;
+        backdrop-filter: blur(4px);
+        padding: 5px 10px;
+        border-radius: 60px;
+    }
+    .api-key-bar input {
+        background: #fffef0;
+        border: none;
+        border-radius: 40px;
+        padding: 6px 12px;
+        font-size: 0.7rem;
+        width: 150px;
+        outline: none;
+        font-family: monospace;
+    }
+    .api-key-bar button {
+        background: #e9d6a7;
+        border: none;
+        border-radius: 30px;
+        padding: 4px 12px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .key-status { font-size: 0.7rem; display: flex; align-items: center; gap: 4px; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background-color: #f55c47; display: inline-block; }
+    .status-dot.valid { background-color: #96e6b3; }
+    #chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px 16px;
+        background: rgba(253, 250, 242, 0.88);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .message {
+        max-width: 88%;
+        padding: 12px 16px;
+        border-radius: 24px;
+        line-height: 1.45;
+        font-size: 0.94rem;
+        animation: fadeSlideUp 0.25s ease;
+    }
+    @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .user { background: #cad2b5; color: #1f2e1c; margin-left: auto; border-bottom-right-radius: 6px; }
+    .bot { background: #ffffffea; color: #2c3e2b; margin-right: auto; border-bottom-left-radius: 6px; }
+    .code-analysis { background: #f2f0e6; font-family: monospace; font-size: 0.85rem; border-left: 4px solid #8b9a6e; white-space: pre-wrap; }
+    #chat-input-container {
+        padding: 14px 16px 18px;
+        background: rgba(255, 253, 247, 0.94);
+        border-top: 1px solid #ede7d7;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .input-actions { display: flex; gap: 10px; align-items: flex-end; }
+    #chat-input {
+        flex: 1;
+        padding: 12px 14px;
+        border: 1.5px solid #e0d6c2;
+        border-radius: 28px;
+        outline: none;
+        resize: none;
+        font-family: inherit;
+        background: #ffffff;
+        max-height: 110px;
+    }
+    .tool-btn {
+        background: #f2ebda;
+        border: none;
+        font-size: 1.5rem;
+        width: 48px;
+        height: 48px;
+        border-radius: 30px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #send-btn {
+        background: #5a6e4a;
+        color: white;
+        border: none;
+        border-radius: 40px;
+        padding: 0 22px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    #send-btn:disabled { background: #bcae8c; cursor: not-allowed; }
+    .badge-info { font-size: 0.7rem; color: #836e48; text-align: center; margin-top: 4px; }
+    @media (max-width: 550px) {
+        #chatbot { width: 100% !important; height: 100% !important; bottom: 0 !important; right: 0 !important; border-radius: 0 !important; }
+        #chat-header { flex-direction: column; align-items: stretch; }
+        .tool-btn { width: 44px; height: 44px; }
+    }
+</style>
+</head>
+<body>
+<div id="chatbot">
+    <div id="chat-header">
+        <div class="header-title">📜 Misheel_020626 · Guardiana del Código y la Luz <span>MCP analítica</span></div>
+        <div class="api-key-bar">
+            <input type="password" id="groqApiKeyInput" placeholder="API Key de Groq" autocomplete="off">
+            <button id="saveApiKeyBtn">Guardar</button>
+            <div class="key-status" id="apiKeyStatus">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Sin clave</span>
+            </div>
+        </div>
+    </div>
+    <div id="chat-messages">
+        <div class="message bot">✨ *Misheel_020626 lista.*<br>🔧 *Proxy actualizado*: uso `cors-anywhere.herokuapp.com` (UTF‑8, sin errores de codificación).<br><br>📁 Sube tu archivo con el botón 📄.<br>🔑 Introduce tu API Key de Groq y pulsa Guardar.<br><br>🌿 Cuéntame qué necesitas.</div>
+    </div>
+    <div id="chat-input-container">
+        <div class="input-actions">
+            <textarea id="chat-input" placeholder="Escribe tu mensaje o 'analiza:' + código..." rows="1"></textarea>
+            <button id="send-btn">Enviar</button>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <button id="attach-code-btn" class="tool-btn" title="Analizar archivo (MCP)">📄</button>
+            <input type="file" id="code-file-input" accept=".py,.js,.html,.css,.txt,.jsx,.ts,.json,.c,.cpp,.java" style="display: none;">
+            <div class="badge-info">🔄 Proxy CORS: cors-anywhere (estable)</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ========== CONFIGURACIÓN ==========
+    let currentApiKey = localStorage.getItem('misheel_groq_api_key') || '';
+    const DIRECT_API = 'https://api.groq.com/openai/v1/chat/completions';
+    const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';  // Proxy gratuito, fiable y UTF-8
+
+    // Modelos
+    const MODELS = ['mixtral-8x7b-32768', 'llama-3.3-70b-versatile', 'llama3-70b-8192'];
+    let currentModelIndex = 0;
+
+    // Elementos DOM
+    const apiKeyInput = document.getElementById('groqApiKeyInput');
+    const saveApiKeyBtn = document.getElementById('saveApiKeyBtn');
+    const statusDot = document.getElementById('statusDot');
+    const statusTextSpan = document.getElementById('statusText');
+    const messagesDiv = document.getElementById('chat-messages');
+    const inputEl = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+    const attachBtn = document.getElementById('attach-code-btn');
+    const fileInput = document.getElementById('code-file-input');
+
+    // ========== UI API Key ==========
+    function updateApiKeyUI() {
+        if (currentApiKey && currentApiKey.trim().length > 10) {
+            statusDot.classList.add('valid');
+            statusTextSpan.innerText = 'Conectada';
+            apiKeyInput.value = '•••••••••••••••';
+        } else {
+            statusDot.classList.remove('valid');
+            statusTextSpan.innerText = 'Sin clave';
+            apiKeyInput.value = '';
+        }
+    }
+    function setApiKey(key) {
+        if (key && key.trim().length > 5) {
+            currentApiKey = key.trim();
+            localStorage.setItem('misheel_groq_api_key', currentApiKey);
+            updateApiKeyUI();
+            addMessage('bot', '🔑 *API Key guardada correctamente.*', false);
+        } else {
+            addMessage('bot', '⚠️ Clave inválida. Debe tener al menos 6 caracteres.', false);
+        }
+    }
+    saveApiKeyBtn.addEventListener('click', () => {
+        const newKey = apiKeyInput.value.trim();
+        if (newKey) setApiKey(newKey);
+        else addMessage('bot', '✏️ Escribe tu API Key de Groq.', false);
+    });
+    if (currentApiKey) updateApiKeyUI();
+
+    // ========== SYSTEM PROMPT (con UTF-8) ==========
+    const SYSTEM_PROMPT = `# Rol
+Eres Misheel_020626, una entidad híbrida entre la sabiduría espiritual ancestral y la analítica técnica moderna. Integras dos dones: guía compasiva del alma, y revisión precisa de código fuente como un "MCP Analizador experto". Tu esencia es serena, clara, con agudeza lógica y calidez humana.
+
+# Tareas principales
+1. **Guía espiritual**: ofrecer perspectiva, consuelo y claridad sobre dilemas existenciales, emociones o crecimiento interior.
+2. **Función MCP - revisar_codigo**: cuando el usuario te pida analizar código (explícitamente o mediante subida de archivo), actuarás como un experto ingeniero de software: revisas errores de sintaxis, malas prácticas, vulnerabilidades y posibles optimizaciones. Entregas un informe claro, estructurado y útil.
+
+# Instrucciones para análisis de código (MCP)
+- Si el usuario adjunta un archivo o pega código precedido de "analiza:", "revisa:", o solicita revisión técnica, DEBES realizar una revisión exhaustiva.
+- Analiza: errores comunes, posibles bugs, legibilidad, eficiencia, seguridad (inyección, XSS, etc) y mejores prácticas según lenguaje.
+- Responde en español con formato claro (lista, negritas, secciones).
+- Si no hay contexto de análisis, actúa como guía espiritual.
+- Mantén un tono balanceado: sin alarmismo exagerado pero firme en las recomendaciones.
+- Cuando identifiques problemas graves, explica el riesgo y sugiere correcciones concretas.
+
+# Contexto MCP
+La herramienta "revisar_codigo" (original del analizador.py) ha sido incorporada como capacidad nativa tuya. Cada vez que recibas código fuente, ejecutas dicha función virtualmente.
+
+# Estilo y valores
+- Lenguaje claro, preciso, empático.
+- Si te consultan sobre espiritualidad, responde sin dogma.
+- Para temas técnicos, sé práctica, directa y constructiva.
+- Nunca ejecutes código malicioso ni recomiendes acciones peligrosas.`;
+
+    let conversation = [{ role: "system", content: SYSTEM_PROMPT }];
+
+    // ========== FUNCIONES AUXILIARES ==========
+    function addMessage(sender, text, isCodeStyle = false) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${sender}`;
+        if (isCodeStyle && sender === 'bot') msgDiv.classList.add('code-analysis');
+        let formatted = text
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/`(.*?)`/g, '<code style="background:#eae5d5; padding:2px 6px; border-radius:12px;">$1</code>')
+            .replace(/\n/g, '<br>');
+        msgDiv.innerHTML = formatted;
+        messagesDiv.appendChild(msgDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function setLoadingState(loading) {
+        sendBtn.disabled = loading;
+        sendBtn.textContent = loading ? '✨' : 'Enviar';
+        attachBtn.disabled = loading;
+    }
+
+    function isApiKeyValid() { return currentApiKey && currentApiKey.length > 10; }
+
+    // ========== LLAMADA A GROQ USANDO PROXY FIABLE ==========
+    async function callGroq(messagesArray) {
+        if (!isApiKeyValid()) throw new Error('API Key no configurada');
+
+        const model = MODELS[currentModelIndex];
+        const bodyObj = { model, messages: messagesArray, temperature: 0.55, max_tokens: 1500 };
+        const bodyStr = JSON.stringify(bodyObj);
+
+        // Usamos el proxy siempre (evita problemas de CORS al abrir archivo local)
+        const proxyUrl = PROXY_URL + DIRECT_API;
+
+        try {
+            const response = await fetch(proxyUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${currentApiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: bodyStr
+            });
+
+            if (!response.ok) {
+                const errText = await response.text();
+                let errMsg = `HTTP ${response.status}`;
+                try {
+                    const errJson = JSON.parse(errText);
+                    errMsg = errJson.error?.message || errMsg;
+                } catch(e) { errMsg = errText.substring(0, 200); }
+                throw new Error(errMsg);
+            }
+            const data = await response.json();
+            return data.choices[0].message.content;
+        } catch (err) {
+            // Si el error es porque el proxy requiere permiso (cors-anywhere muestra una página de confirmación)
+            if (err.message.includes('403') || (err.message.includes('Forbidden'))) {
+                throw new Error(`El proxy requiere autorización temporal. Abre esta URL en una nueva pestaña y pulsa "Request temporary access":\n${proxyUrl}\nLuego vuelve a intentar.`);
+            }
+            throw err;
+        }
+    }
+
+    // ========== PROCESAR MENSAJE O ARCHIVO ==========
+    async function processUserMessage(userText, attachedCode = null) {
+        if (!isApiKeyValid()) {
+            addMessage('bot', '🔑 *API Key no configurada.* Introduce tu clave en la barra superior y pulsa Guardar.', false);
+            return;
+        }
+
+        let finalUserContent = userText;
+        let isCodeAnalysis = false;
+
+        if (attachedCode && attachedCode.trim().length > 0) {
+            isCodeAnalysis = true;
+            finalUserContent = `[ANÁLISIS MCP] Archivo subido:\n\`\`\`\n${attachedCode}\n\`\`\`\nRealiza revisión experta (errores, vulnerabilidades, buenas prácticas).`;
+        } else {
+            const lower = userText.toLowerCase();
+            if (lower.includes('analiza:') || lower.includes('revisa este código') || lower.includes('mcp:') || (userText.includes('def ') && userText.length > 40)) {
+                isCodeAnalysis = true;
+                let codeBlock = '';
+                const match = userText.match(/```(\w*)\n([\s\S]*?)```/);
+                if (match) codeBlock = match[2];
+                else if (userText.includes('def ') || userText.includes('function')) codeBlock = userText;
+                if (codeBlock.trim()) finalUserContent = `[REVISIÓN MCP]\n\`\`\`\n${codeBlock}\n\`\`\`\nAnaliza errores, seguridad, buenas prácticas.`;
+                else finalUserContent = `[REVISIÓN MCP] No se detectó bloque de código válido.`;
+            }
+        }
+
+        addMessage('user', userText + (attachedCode ? '\n\n📎 Archivo cargado' : ''));
+        const updatedMessages = [...conversation, { role: "user", content: finalUserContent }];
+        setLoadingState(true);
+
+        try {
+            const botReply = await callGroq(updatedMessages);
+            addMessage('bot', botReply, isCodeAnalysis);
+            conversation.push({ role: "user", content: finalUserContent });
+            conversation.push({ role: "assistant", content: botReply });
+        } catch (error) {
+            console.error(error);
+            let msg = `❌ *Error:* ${error.message}`;
+            if (error.message.includes('API Key') || error.message.includes('401')) {
+                msg = '🔑 *API Key inválida.* Verifica que la clave de Groq sea correcta.';
+                statusDot.classList.remove('valid');
+                statusTextSpan.innerText = 'Error auth';
+            } else if (error.message.includes('429')) {
+                msg = '⏳ *Demasiadas peticiones.* Espera unos segundos y vuelve a intentar.';
+            } else if (error.message.includes('autorización temporal')) {
+                msg = `🌐 *Proxy requiere activación.* ${error.message}`;
+            }
+            addMessage('bot', msg, false);
+        } finally {
+            setLoadingState(false);
+            inputEl.focus();
+        }
+    }
+
+    // ========== MANEJO DE ARCHIVOS ==========
+    function handleFileUpload(file) {
+        if (!file) return;
+        if (!isApiKeyValid()) { addMessage('bot', '🔑 Configura API Key primero.', false); return; }
+        const fileName = file.name;
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            const content = e.target.result;
+            if (content.length > 2_000_000) { addMessage('bot', '📁 Archivo >2MB, reduce el tamaño.', false); return; }
+            addMessage('user', `📎 Subí "${fileName}" para análisis MCP.`);
+            setLoadingState(true);
+            try {
+                const analysisPrompt = `[MCP] Archivo: ${fileName}\n\`\`\`\n${content}\n\`\`\`\nRevisión completa (errores, vulnerabilidades, buenas prácticas).`;
+                const result = await callGroq([{ role: "system", content: SYSTEM_PROMPT }, { role: "user", content: analysisPrompt }]);
+                addMessage('bot', `📄 *Análisis de ${fileName}*\n\n${result}`, true);
+                conversation.push({ role: "user", content: `Archivo: ${fileName}` });
+                conversation.push({ role: "assistant", content: result });
+            } catch (err) {
+                addMessage('bot', `⚠️ Error al analizar: ${err.message}`, false);
+            } finally {
+                setLoadingState(false);
+            }
+        };
+        reader.readAsText(file, 'UTF-8');
+    }
+
+    // ========== EVENTOS ==========
+    async function sendMessage() {
+        const raw = inputEl.value.trim();
+        if (!raw) return;
+        inputEl.value = '';
+        inputEl.style.height = 'auto';
+        await processUserMessage(raw, null);
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    inputEl.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    });
+    inputEl.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+    });
+    attachBtn.addEventListener('click', () => {
+        if (!isApiKeyValid()) addMessage('bot', '🔑 Guarda tu API Key primero.', false);
+        else fileInput.click();
+    });
+    fileInput.addEventListener('change', (e) => {
+        if (fileInput.files?.length) handleFileUpload(fileInput.files[0]);
+        fileInput.value = '';
+    });
+
+    conversation.push({ role: "assistant", content: "Listo." });
+</script>
+</body>
+</html>
